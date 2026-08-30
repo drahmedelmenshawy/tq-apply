@@ -1,0 +1,530 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>TQ Pharma — Medical Representative Application</title>
+<style>
+:root{
+  --ink:#12232e; --muted:#5b6b76; --line:#dde5ea; --bg:#f4f7f9; --card:#fff;
+  --brand:#0f6e63; --brand-dark:#0b544c; --brand-soft:#e6f2f0; --danger:#b3261e; --radius:12px;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  font:16px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  color:var(--ink); background:var(--bg); -webkit-text-size-adjust:100%;
+}
+.wrap{max-width:760px;margin:0 auto;padding:0 16px 64px}
+header.top{background:var(--brand);color:#fff;padding:22px 0 20px;margin-bottom:18px}
+header.top .wrap{padding-bottom:0}
+.brand{font-size:13px;letter-spacing:.14em;text-transform:uppercase;opacity:.85;margin:0 0 6px}
+h1{font-size:21px;line-height:1.3;margin:0 0 8px;font-weight:650}
+header.top p{margin:0;font-size:14px;opacity:.92;max-width:56ch}
+.bar{height:5px;background:rgba(255,255,255,.28);border-radius:99px;margin-top:16px;overflow:hidden}
+.bar i{display:block;height:100%;background:#fff;width:0;transition:width .3s ease}
+.steplabel{font-size:12px;opacity:.85;margin-top:8px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:18px 16px;margin-bottom:14px}
+.card h2{font-size:16px;margin:0 0 2px;font-weight:650}
+.card .hint{color:var(--muted);font-size:13px;margin:0 0 14px}
+.f{margin-bottom:18px}
+.f > label,.legend{display:block;font-weight:600;font-size:14.5px;margin-bottom:6px}
+.sub{color:var(--muted);font-size:13px;font-weight:400;margin:2px 0 8px}
+.req{color:var(--danger);margin-left:2px}
+input[type=text],input[type=email],input[type=tel],input[type=number],input[type=date],select,textarea{
+  width:100%;padding:11px 12px;border:1px solid var(--line);border-radius:9px;font:inherit;color:inherit;
+  background:#fff;-webkit-appearance:none;appearance:none;
+}
+select{background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='8'><path d='M1 1l5 5 5-5' fill='none' stroke='%235b6b76' stroke-width='2'/></svg>");background-repeat:no-repeat;background-position:right 12px center;padding-right:34px}
+textarea{min-height:92px;resize:vertical}
+input:focus,select:focus,textarea:focus{outline:2px solid var(--brand);outline-offset:1px;border-color:var(--brand)}
+.opts{border:1px solid var(--line);border-radius:9px;background:#fff}
+.opts .search{padding:8px;border-bottom:1px solid var(--line)}
+.opts .list{max-height:262px;overflow-y:auto;-webkit-overflow-scrolling:touch}
+.opt{display:flex;align-items:flex-start;gap:10px;padding:9px 12px;border-bottom:1px solid #eef3f6;cursor:pointer}
+.opt:last-child{border-bottom:0}
+.opt input{margin:2px 0 0;width:18px;height:18px;accent-color:var(--brand);flex:none}
+.opt span{font-size:14.5px}
+.opt.on{background:var(--brand-soft)}
+.count{font-size:12.5px;color:var(--muted);margin-top:6px}
+.radio{display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--line);border-radius:9px;margin-bottom:8px;cursor:pointer;background:#fff}
+.radio.on{border-color:var(--brand);background:var(--brand-soft)}
+.radio input{accent-color:var(--brand);width:18px;height:18px;flex:none}
+.rows .row{display:flex;gap:8px;margin-bottom:8px}
+.rows .row input{flex:1}
+.rows .row button{flex:none;width:40px;border:1px solid var(--line);background:#fff;border-radius:9px;color:var(--muted);font-size:18px;line-height:1;cursor:pointer}
+.addbtn{background:var(--brand-soft);color:var(--brand-dark);border:1px dashed var(--brand);border-radius:9px;padding:9px 14px;font:inherit;font-weight:600;cursor:pointer}
+.grid .drow{border:1px solid var(--line);border-radius:10px;padding:10px 10px 2px;margin-bottom:10px;background:#fff}
+.grid .drow .n{font-size:12.5px;font-weight:700;color:var(--brand-dark);margin-bottom:8px;letter-spacing:.04em}
+.grid .drow .cells{display:grid;grid-template-columns:1fr;gap:8px;margin-bottom:10px}
+@media(min-width:640px){ .grid .drow .cells{grid-template-columns:1.1fr .9fr 1.1fr} }
+.nav{display:flex;gap:10px;margin-top:6px}
+.btn{flex:1;padding:13px 16px;border-radius:10px;border:1px solid var(--brand);background:var(--brand);color:#fff;font:inherit;font-weight:650;cursor:pointer}
+.btn.ghost{background:#fff;color:var(--brand-dark)}
+.btn:disabled{opacity:.55;cursor:default}
+.err{color:var(--danger);font-size:13px;margin-top:6px;display:none}
+.err.on{display:block}
+.banner{background:#fdecea;border:1px solid #f2c4bf;color:var(--danger);padding:11px 13px;border-radius:9px;font-size:14px;margin-bottom:14px;display:none}
+.banner.on{display:block}
+.done{text-align:center;padding:44px 18px}
+.done .tick{width:62px;height:62px;border-radius:50%;background:var(--brand-soft);color:var(--brand);display:flex;align-items:center;justify-content:center;font-size:32px;margin:0 auto 16px}
+.done h2{font-size:20px;margin:0 0 8px}
+.done p{color:var(--muted);margin:0 auto;max-width:44ch}
+.foot{text-align:center;color:var(--muted);font-size:12.5px;margin-top:18px}
+.hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <p class="brand">TQ Pharma</p>
+    <h1>Medical Representative — Application</h1>
+    <p>Thank you for applying. Please complete this short form so we can finalise the shortlist for interview. It takes about 5 minutes and your answers are used only for this recruitment process.</p>
+    <div class="bar"><i id="bar"></i></div>
+    <div class="steplabel" id="steplabel">Step 1 of 6</div>
+  </div>
+</header>
+
+<div class="wrap">
+<div class="banner" id="banner"></div>
+<form id="form" autocomplete="on" novalidate>
+
+<section class="card step" data-step="1">
+  <h2>Your details</h2>
+  <p class="hint">All fields on this page are required.</p>
+
+  <div class="f"><label for="full_name">Full name (as in your passport)<span class="req">*</span></label>
+    <input id="full_name" name="full_name" type="text" autocomplete="name" required><div class="err"></div></div>
+
+  <div class="f"><label for="mobile">WhatsApp number<span class="req">*</span></label>
+    <div class="sub">Include the country code, for example +971 50 123 4567</div>
+    <input id="mobile" name="mobile" type="tel" inputmode="tel" autocomplete="tel" placeholder="+971 50 123 4567" required><div class="err"></div></div>
+
+  <div class="f"><label for="email">Email address<span class="req">*</span></label>
+    <input id="email" name="email" type="email" inputmode="email" autocomplete="email" required><div class="err"></div></div>
+
+  <div class="f"><label for="dob">Date of birth<span class="req">*</span></label>
+    <input id="dob" name="dob" type="date" required><div class="err"></div></div>
+
+  <div class="f"><label for="nationality">Nationality<span class="req">*</span></label>
+    <select id="nationality" name="nationality" required>
+      <option value="">Select…</option>
+      <option>Egyptian</option><option>Jordanian</option><option>Syrian</option><option>Lebanese</option>
+      <option>Sudanese</option><option>Tunisian</option><option>Indian</option><option>Pakistani</option>
+      <option>Filipino</option><option>Other</option>
+    </select><div class="err"></div></div>
+
+  <div class="f"><span class="legend">Where do you live right now?<span class="req">*</span></span>
+    <div id="live" data-radio="live"></div><div class="err"></div></div>
+
+  <div class="f"><span class="legend">Your current UAE visa status<span class="req">*</span></span>
+    <div id="visa" data-radio="visa"></div><div class="err"></div></div>
+
+  <div class="f"><span class="legend">Do you hold a UAE driving licence?<span class="req">*</span></span>
+    <div id="licence" data-radio="licence"></div><div class="err"></div></div>
+</section>
+
+<section class="card step" data-step="2" hidden>
+  <h2>Education</h2>
+  <p class="hint">All fields on this page are required.</p>
+
+  <div class="f"><label for="degree">Highest degree<span class="req">*</span></label>
+    <select id="degree" name="degree" required>
+      <option value="">Select…</option>
+      <option>Bachelor of Pharmacy (B.Pharm)</option><option>PharmD</option>
+      <option>Bachelor of Science</option><option>Veterinary Medicine</option>
+      <option>Medicine (MBBCh)</option><option>Dentistry</option><option>Other</option>
+    </select><div class="err"></div></div>
+
+  <div class="f"><label for="university">University or college<span class="req">*</span></label>
+    <input id="university" name="university" type="text" required><div class="err"></div></div>
+
+  <div class="f"><label for="grad_year">Graduation year<span class="req">*</span></label>
+    <input id="grad_year" name="grad_year" type="number" inputmode="numeric" min="1970" max="2030" placeholder="2014" required><div class="err"></div></div>
+</section>
+
+<section class="card step" data-step="3" hidden>
+  <h2>Your experience</h2>
+  <p class="hint">Answer about <strong>field medical sales</strong> — visiting doctors, pharmacies and hospitals. Retail or hospital pharmacy work does not count here.</p>
+
+  <div class="f"><label for="total_years">Total years of experience in pharmaceutical medical sales<span class="req">*</span></label>
+    <input id="total_years" name="total_years" type="number" inputmode="decimal" step="0.5" min="0" max="50" required><div class="err"></div></div>
+
+  <div class="f"><label for="uae_years">Of those, how many years as a FIELD medical rep or product specialist IN THE UAE?<span class="req">*</span></label>
+    <div class="sub">Enter 0 if you have not worked in the field in the UAE.</div>
+    <input id="uae_years" name="uae_years" type="number" inputmode="decimal" step="0.5" min="0" max="50" required><div class="err"></div></div>
+
+  <div class="f"><label for="companies">How many companies have you worked for in total?<span class="req">*</span></label>
+    <input id="companies" name="companies" type="number" inputmode="numeric" min="1" max="30" required><div class="err"></div></div>
+
+  <div class="f"><label for="employer">Current or most recent employer<span class="req">*</span></label>
+    <input id="employer" name="employer" type="text" required><div class="err"></div></div>
+
+  <div class="f"><label for="job_title">Current or most recent job title<span class="req">*</span></label>
+    <input id="job_title" name="job_title" type="text" required><div class="err"></div></div>
+
+  <div class="f"><span class="legend">Which UAE areas have you covered in the field?<span class="req">*</span></span>
+    <div class="sub">Select all that apply.</div>
+    <div id="areas" data-multi="areas"></div><div class="err"></div></div>
+
+  <div class="f"><label for="target">Your target achievement last year (%)</label>
+    <div class="sub">Optional. For example: 105</div>
+    <input id="target" name="target" type="text" inputmode="numeric" placeholder="105"></div>
+</section>
+
+<section class="card step" data-step="4" hidden>
+  <h2>What you cover</h2>
+  <p class="hint">Use the search box in each list to find items quickly.</p>
+
+  <div class="f"><span class="legend">Which specialities do you call on?<span class="req">*</span></span>
+    <div class="sub">Select all that apply.</div>
+    <div id="specs" data-multi="specialities"></div><div class="err"></div></div>
+
+  <div class="f"><span class="legend">Hospital and clinic groups you have a STRONG relationship with<span class="req">*</span></span>
+    <div class="sub">Select all that apply. If a group is not listed, add it underneath.</div>
+    <div id="accs" data-multi="accounts"></div>
+    <div class="sub" style="margin-top:12px">Other hospitals, clinics or medical centres not in the list:</div>
+    <div class="rows" id="accs_other"></div>
+    <button type="button" class="addbtn" data-add="accs_other">+ Add another account</button>
+    <div class="err"></div></div>
+
+  <div class="f"><span class="legend">Pharmacy chains you have a STRONG relationship with<span class="req">*</span></span>
+    <div class="sub">Select all that apply. If a chain is not listed, add it underneath.</div>
+    <div id="phs" data-multi="pharmacies"></div>
+    <div class="sub" style="margin-top:12px">Other pharmacies not in the list:</div>
+    <div class="rows" id="phs_other"></div>
+    <button type="button" class="addbtn" data-add="phs_other">+ Add another pharmacy</button>
+    <div class="err"></div></div>
+</section>
+
+<section class="card step" data-step="5" hidden>
+  <h2>Your top 10 doctor relationships</h2>
+  <p class="hint">List at least 10 doctors you have a very strong relationship with. All 10 rows are required.</p>
+  <div class="grid" id="docgrid"></div>
+  <div class="err" id="docerr"></div>
+</section>
+
+<section class="card step" data-step="6" hidden>
+  <h2>Package and availability</h2>
+
+  <div class="f"><label for="cur_salary">Current monthly gross salary in AED<span class="req">*</span></label>
+    <div class="sub">Basic plus allowances, before commission.</div>
+    <input id="cur_salary" name="cur_salary" type="text" inputmode="numeric" required><div class="err"></div></div>
+
+  <div class="f"><label for="exp_salary">Expected monthly gross salary in AED<span class="req">*</span></label>
+    <input id="exp_salary" name="exp_salary" type="text" inputmode="numeric" required><div class="err"></div></div>
+
+  <div class="f"><span class="legend">Notice period<span class="req">*</span></span>
+    <div id="notice" data-radio="notice"></div><div class="err"></div></div>
+
+  <div class="f"><label for="notes">Anything else you would like us to know?</label>
+    <div class="sub">Optional.</div>
+    <textarea id="notes" name="notes"></textarea></div>
+
+  <div class="hp"><label>Do not fill this<input type="text" id="website" name="website" tabindex="-1" autocomplete="off"></label></div>
+</section>
+
+<div class="nav">
+  <button type="button" class="btn ghost" id="back" hidden>Back</button>
+  <button type="button" class="btn" id="next">Continue</button>
+</div>
+</form>
+
+<div id="done" class="card done" hidden>
+  <div class="tick">&#10003;</div>
+  <h2>Thank you — your application has been received.</h2>
+  <p>If you are shortlisted, our team will contact you on the WhatsApp number you provided to arrange an interview.</p>
+</div>
+
+<p class="foot">TQ Pharma · Your information is used only for this recruitment process.</p>
+</div>
+<script>
+(function(){
+"use strict";
+var SB_URL="https://nxbyyxqquxoivlzlzezy.supabase.co";
+var SB_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im54Ynl5eHFxdXhvaXZsemx6ZXp5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjkyNTAyOTYsImV4cCI6MjA4NDgyNjI5Nn0.DZF313qTGbUr3Soo8GG5NWYuAJQy0Wr1LDyYYEfcG_M";
+
+var LIVE=["Dubai","Sharjah","Ajman","Abu Dhabi","Al Ain","Ras Al Khaimah, Fujairah or Umm Al Quwain","I am outside the UAE"];
+var VISA=["Employment visa - transferable","Employment visa - not transferable","Spouse or family visa","Own visa (freelance, investor or golden)","Visit or tourist visa","Cancelled - on grace period","I do not have a UAE visa"];
+var LICENCE=["Yes","No","Under process"];
+var NOTICE=["I can join immediately","2 weeks","1 month","2 months","3 months"];
+var AREAS=["Dubai","Sharjah","Ajman","Abu Dhabi","Al Ain","Ras Al Khaimah, Fujairah or Umm Al Quwain","None - I have no UAE field experience"];
+
+var SPECIALITIES=["GP / General Practice","Internal Medicine","Family Medicine","Paediatrics","Obstetrics & Gynaecology","Orthopaedics","Urology","Nephrology","Dermatology","ENT","Chest / Pulmonology","Cardiology","Neurology","Psychiatry","Endocrinology & Diabetes","Gastroenterology","Rheumatology","Ophthalmology","General Surgery","Dentistry"];
+
+var ACCOUNTS=["Medcare","NMC","Aster (Clinics and Hospitals)","Mediclinic","Prime (Hospital and Medical Centres)","Saudi German Hospital","Zulekha Hospital","American Hospital Dubai","Thumbay","Emirates Hospital","Right Health","HealthHub (Al Futtaim)","Burjeel / VPS (incl. Medeor and LLH)","Fakeeh University Hospital","Al Zahra Hospital","Cleveland Clinic Abu Dhabi","SEHA / PureHealth","Ahalia Hospital","International Modern Hospital","Life Healthcare / Life Medical","Tadawi / Al Tadawi","Dubai Health (Rashid, Dubai Hospital, Latifa, Hatta)","Novomed","Canadian Specialist Hospital","Dubai London Hospital","American Center for Psychiatry and Neurology","iCARE Clinics","Med7","GMC Clinics","Dr. Ismail Healthcare Group","Via Medica","Medstar","Smart Salem","Al Noor Polyclinic","Magrabi","Moorfields Eye Hospital","KIMS Healthcare","Unicare Medical Center","DRHC Medical Center","Iranian Hospital","King's College Hospital London UAE","Gargash Hospital","Canadian Medical Center","Sheikh Khalifa Medical City","Al Danah Hospital","Central Hospital Sharjah","Access Clinic","Clemenceau Medical Center","Reem Hospital","Al Abeer Medical Center","Danat Al Emarat","Harley Street Medical Centre","Ain Al Khaleej Hospital","Cooper Health Clinic","Vesta Care","Emirates International Hospital","Multicare Medical Center","Ministry of Health (MOHAP) hospitals","Independent clinics and medical centres"];
+
+var PHARMACIES=["Aster Pharmacy","Life Pharmacy","Bin Sina Pharmacy","Medicina Pharmacy","Health First Pharmacy (Planet Pharmacies)","Al Ain Pharmacy","Hala Pharmacy","Burjeel Pharmacy (VPS)","Boots Pharmacy (Alshaya)","Al Manara Pharmacy","Nahdi Pharmacy","Marina Pharmacy","Mediclinic Pharmacy","SEHA / PureHealth Pharmacy","Medicom Pharmacy","Medi Prime Pharmacy (Prime Healthcare)","Community Pharmacy","HealthHub Pharmacy (Al-Futtaim)","Super Care Pharmacy","Right Health / Karama Medical Centre Pharmacy","Thumbay Pharmacy","Med X Pharmacy","NMC Pharmacy","Novomed Pharmacy","Tadawi Pharmacy","Dr. Sulaiman Al Habib Pharmacy","Royal Pharmacy","New Sanaiya Pharmacy","Advanced Care Pharmacy","Aston Pharmacy","Medstar Pharmacy","Ibn Sina Group Pharmacies","Med7 Pharmacy","Zest Pharmacy Group","Olive Pharmacy Group","Fanar Pharmacy","Emirates Pharmacy","Better Life Pharmacy","Apotec Pharmacy","Oasis Pharmacy","Target Pharmacy","Faith Pharmacy","Alpha Pharmacy","Al Ahlia Pharmacy Group","Metro Meds","Medovita Pharmacy","HealthX Pharmacy Group","Noor Al Shifa Pharmacy","Shifa Al Jazeera Pharmacy","Al Reem Pharmacy","Al Zaytoon Pharmacy","Al Diyar Pharmacy","Al Falasi Pharmacy","Al Asdiqaa Pharmacy","Ayesha Pharmacy","Ghantoot Pharmacy","Hafeet Pharmacy","Creek Line Pharmacy","Peshawar Pharmacy","Mubarak Pharmacy","Ruman Pharmacy","Independent / single pharmacies"];
+
+function el(t,c,txt){var e=document.createElement(t); if(c)e.className=c; if(txt!=null)e.textContent=txt; return e;}
+function $(s){return document.querySelector(s);}
+
+function radios(host,name,list){
+  list.forEach(function(v){
+    var l=el("label","radio");
+    var i=document.createElement("input");
+    i.type="radio"; i.name=name; i.value=v;
+    i.addEventListener("change",function(){
+      Array.prototype.forEach.call(host.querySelectorAll(".radio"),function(r){r.classList.remove("on");});
+      l.classList.add("on");
+    });
+    l.appendChild(i); l.appendChild(el("span",null,v));
+    host.appendChild(l);
+  });
+}
+
+function multi(host,name,list,searchable){
+  var box=el("div","opts"), si=null;
+  if(searchable){
+    var sw=el("div","search");
+    si=document.createElement("input");
+    si.type="text"; si.placeholder="Search "+list.length+" options…"; si.setAttribute("aria-label","Search options");
+    sw.appendChild(si); box.appendChild(sw);
+  }
+  var listEl=el("div","list");
+  list.forEach(function(v){
+    var l=el("label","opt");
+    var i=document.createElement("input");
+    i.type="checkbox"; i.name=name; i.value=v;
+    i.addEventListener("change",function(){ l.classList.toggle("on",i.checked); updCount(); });
+    l.appendChild(i); l.appendChild(el("span",null,v));
+    listEl.appendChild(l);
+  });
+  box.appendChild(listEl);
+  host.appendChild(box);
+  var cnt=el("div","count","0 selected"); host.appendChild(cnt);
+  function updCount(){ cnt.textContent=listEl.querySelectorAll("input:checked").length+" selected"; }
+  if(searchable){
+    si.addEventListener("input",function(){
+      var q=si.value.trim().toLowerCase();
+      Array.prototype.forEach.call(listEl.children,function(l){
+        l.style.display = !q || l.textContent.toLowerCase().indexOf(q)>-1 ? "" : "none";
+      });
+    });
+  }
+}
+
+function addRow(hostId,ph){
+  var host=document.getElementById(hostId);
+  var row=el("div","row");
+  var i=document.createElement("input");
+  i.type="text"; i.placeholder=ph; i.className="extra";
+  var b=el("button",null,"×");
+  b.type="button"; b.setAttribute("aria-label","Remove this row");
+  b.addEventListener("click",function(){
+    row.remove();
+    if(!host.children.length) addRow(hostId,ph);
+  });
+  row.appendChild(i); row.appendChild(b); host.appendChild(row);
+  return i;
+}
+
+function buildGrid(){
+  var g=document.getElementById("docgrid");
+  for(var n=1;n<=10;n++){
+    var d=el("div","drow");
+    d.appendChild(el("div","n","DOCTOR "+n));
+    var cells=el("div","cells");
+    [["name","Doctor name"],["spec","Speciality"],["clinic","Clinic / hospital"]].forEach(function(c){
+      var i=document.createElement("input");
+      i.type="text"; i.placeholder=c[1];
+      i.setAttribute("data-doc",n); i.setAttribute("data-part",c[0]);
+      cells.appendChild(i);
+    });
+    d.appendChild(cells);
+    g.appendChild(d);
+  }
+}
+
+radios($("#live"),"live",LIVE);
+radios($("#visa"),"visa",VISA);
+radios($("#licence"),"licence",LICENCE);
+radios($("#notice"),"notice",NOTICE);
+multi($("#areas"),"areas",AREAS,false);
+multi($("#specs"),"specialities",SPECIALITIES,false);
+multi($("#accs"),"accounts",ACCOUNTS,true);
+multi($("#phs"),"pharmacies",PHARMACIES,true);
+addRow("accs_other","Hospital, clinic or medical centre name");
+addRow("phs_other","Pharmacy name");
+buildGrid();
+Array.prototype.forEach.call(document.querySelectorAll("[data-add]"),function(b){
+  b.addEventListener("click",function(){
+    var id=b.getAttribute("data-add");
+    var i=addRow(id, id==="accs_other" ? "Hospital, clinic or medical centre name" : "Pharmacy name");
+    i.focus();
+  });
+});
+
+var TOTAL=6, step=1;
+var steps=document.querySelectorAll(".step");
+var back=$("#back"), next=$("#next"), bar=$("#bar"), lab=$("#steplabel"), banner=$("#banner");
+
+function show(n){
+  step=n;
+  Array.prototype.forEach.call(steps,function(s){ s.hidden = +s.getAttribute("data-step")!==n; });
+  back.hidden = n===1;
+  next.textContent = n===TOTAL ? "Submit application" : "Continue";
+  bar.style.width = Math.round(((n-1)/TOTAL)*100)+"%";
+  lab.textContent = "Step "+n+" of "+TOTAL;
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+function fail(node,msg){
+  var f=(node.closest && node.closest(".f"))||node;
+  var e=f.querySelector?f.querySelector(".err"):null;
+  if(e){ e.textContent=msg; e.classList.add("on"); }
+  return f;
+}
+function clearErrs(sec){
+  Array.prototype.forEach.call(sec.querySelectorAll(".err"),function(e){e.classList.remove("on");});
+  banner.classList.remove("on");
+}
+function countExtras(id){
+  var n=0;
+  Array.prototype.forEach.call(document.getElementById(id).querySelectorAll("input"),function(i){ if((i.value||"").trim()) n++; });
+  return n;
+}
+function validate(n){
+  var sec=document.querySelector('.step[data-step="'+n+'"]');
+  clearErrs(sec);
+  var first=null;
+  Array.prototype.forEach.call(sec.querySelectorAll("input[required],select[required]"),function(i){
+    var val=(i.value||"").trim(); var bad=!val;
+    if(!bad && i.type==="email") bad=!/^[^@\s]+@[^@\s]+\.[^@\s]{2,}$/.test(val);
+    if(!bad && i.type==="tel") bad=(val.replace(/\D/g,"").length<8);
+    if(!bad && i.type==="number"){ var num=parseFloat(val); bad=isNaN(num)||num<0; }
+    if(bad){ var f=fail(i, i.type==="email"?"Please enter a valid email address.":i.type==="tel"?"Please enter a valid phone number with country code.":"This answer is required."); if(!first)first=f; }
+  });
+  Array.prototype.forEach.call(sec.querySelectorAll("[data-radio]"),function(h){
+    var nm=h.getAttribute("data-radio");
+    if(!sec.querySelector('input[name="'+nm+'"]:checked')){ var f=fail(h,"Please choose one option."); if(!first)first=f; }
+  });
+  Array.prototype.forEach.call(sec.querySelectorAll("[data-multi]"),function(h){
+    var nm=h.getAttribute("data-multi");
+    var chosen=sec.querySelectorAll('input[name="'+nm+'"]:checked').length;
+    var ex=0;
+    if(nm==="accounts") ex=countExtras("accs_other");
+    if(nm==="pharmacies") ex=countExtras("phs_other");
+    if(!chosen && !ex){ var f=fail(h,"Please select at least one, or add one below."); if(!first)first=f; }
+  });
+  if(n===5){
+    var e=document.getElementById("docerr"); e.classList.remove("on");
+    var missing=[];
+    for(var d=1;d<=10;d++){
+      var parts=document.querySelectorAll('[data-doc="'+d+'"]'), filled=0;
+      Array.prototype.forEach.call(parts,function(p){ if((p.value||"").trim()) filled++; });
+      if(filled<3) missing.push(d);
+    }
+    if(missing.length){
+      e.textContent="Please complete all three fields (name, speciality, clinic) for doctor "+(missing.length>1?"rows":"row")+" "+missing.join(", ")+".";
+      e.classList.add("on");
+      if(!first) first=document.querySelector('[data-doc="'+missing[0]+'"]');
+    }
+  }
+  if(first){ banner.textContent="Please check the highlighted answers below."; banner.classList.add("on"); if(first.scrollIntoView) first.scrollIntoView({block:"center",behavior:"smooth"}); return false; }
+  return true;
+}
+
+function vals(name){ return Array.prototype.map.call(document.querySelectorAll('input[name="'+name+'"]:checked'),function(i){return i.value;}); }
+function extras(id){
+  var out=[];
+  Array.prototype.forEach.call(document.getElementById(id).querySelectorAll("input"),function(i){
+    var v=(i.value||"").trim(); if(v) out.push(v);
+  });
+  return out;
+}
+function one(name){ var i=document.querySelector('input[name="'+name+'"]:checked'); return i?i.value:""; }
+function v(id){ var e=document.getElementById(id); return e?(e.value||"").trim():""; }
+
+function collect(){
+  var docs=[];
+  for(var d=1;d<=10;d++){
+    var o={};
+    Array.prototype.forEach.call(document.querySelectorAll('[data-doc="'+d+'"]'),function(p){
+      o[p.getAttribute("data-part")]=(p.value||"").trim();
+    });
+    if(o.name||o.spec||o.clinic) docs.push({n:d,name:o.name,speciality:o.spec,clinic:o.clinic});
+  }
+  return {
+    full_name:v("full_name"), mobile:v("mobile"), email:v("email"),
+    dob:v("dob"), nationality:v("nationality"),
+    lives_in:one("live"), visa_status:one("visa"), driving_licence:one("licence"),
+    degree:v("degree"), university:v("university"), grad_year:v("grad_year"),
+    total_years:v("total_years"), uae_field_years:v("uae_years"),
+    companies:v("companies"), employer:v("employer"), job_title:v("job_title"),
+    areas_covered:vals("areas"), target_achievement:v("target"),
+    specialities:vals("specialities"),
+    accounts:vals("accounts"), accounts_other:extras("accs_other"),
+    pharmacies:vals("pharmacies"), pharmacies_other:extras("phs_other"),
+    doctors:docs,
+    current_salary:v("cur_salary"), expected_salary:v("exp_salary"),
+    notice_period:one("notice"), notes:v("notes"),
+    submitted_client_time:new Date().toISOString(),
+    user_agent:navigator.userAgent
+  };
+}
+
+var sending=false;
+next.addEventListener("click",function(){
+  if(sending) return;
+  if(!validate(step)) return;
+  if(step<TOTAL){ show(step+1); return; }
+  if(v("website")) return;
+  sending=true; next.disabled=true; next.textContent="Sending…";
+  fetch(SB_URL+"/rest/v1/applicant_intake",{
+    method:"POST",
+    headers:{"apikey":SB_KEY,"Authorization":"Bearer "+SB_KEY,"Content-Type":"application/json","Prefer":"return=minimal"},
+    body:JSON.stringify({payload:collect()})
+  }).then(function(r){
+    if(!r.ok) return r.text().then(function(t){ throw new Error("HTTP "+r.status+" "+t.slice(0,180)); });
+    try{ localStorage.removeItem("tqp_draft"); }catch(e){}
+    document.getElementById("form").hidden=true;
+    document.querySelector(".nav").hidden=true;
+    document.getElementById("done").hidden=false;
+    bar.style.width="100%"; lab.textContent="Completed";
+    window.scrollTo({top:0,behavior:"smooth"});
+  }).catch(function(err){
+    sending=false; next.disabled=false; next.textContent="Submit application";
+    banner.textContent="Sorry, we could not send your application. Please check your connection and try again. If it keeps failing, reply on WhatsApp and we will help. ("+err.message+")";
+    banner.classList.add("on");
+    window.scrollTo({top:0,behavior:"smooth"});
+  });
+});
+back.addEventListener("click",function(){ if(step>1) show(step-1); });
+
+function saveDraft(){ try{ localStorage.setItem("tqp_draft",JSON.stringify(collect())); }catch(e){} }
+document.getElementById("form").addEventListener("input",function(){ clearTimeout(window.__t); window.__t=setTimeout(saveDraft,600); });
+
+(function restore(){
+  var raw=null; try{ raw=localStorage.getItem("tqp_draft"); }catch(e){}
+  if(!raw) return;
+  var d; try{ d=JSON.parse(raw); }catch(e){ return; }
+  var pairs=[["full_name","full_name"],["mobile","mobile"],["email","email"],["dob","dob"],["nationality","nationality"],
+             ["degree","degree"],["university","university"],["grad_year","grad_year"],["total_years","total_years"],
+             ["uae_years","uae_field_years"],["companies","companies"],["employer","employer"],["job_title","job_title"],
+             ["target","target_achievement"],["cur_salary","current_salary"],["exp_salary","expected_salary"],["notes","notes"]];
+  pairs.forEach(function(p){ var e=document.getElementById(p[0]); if(e&&d[p[1]]) e.value=d[p[1]]; });
+  function reCheck(name,arr){ if(!arr) return; arr.forEach(function(val){
+    var i=document.querySelector('input[name="'+name+'"][value="'+String(val).replace(/"/g,'\\"')+'"]');
+    if(i){ i.checked=true; i.dispatchEvent(new Event("change")); } }); }
+  reCheck("areas",d.areas_covered); reCheck("specialities",d.specialities);
+  reCheck("accounts",d.accounts); reCheck("pharmacies",d.pharmacies);
+  [["live",d.lives_in],["visa",d.visa_status],["licence",d.driving_licence],["notice",d.notice_period]].forEach(function(p){
+    if(!p[1]) return;
+    var i=document.querySelector('input[name="'+p[0]+'"][value="'+String(p[1]).replace(/"/g,'\\"')+'"]');
+    if(i){ i.checked=true; i.dispatchEvent(new Event("change")); }
+  });
+  function fill(host,arr,ph){ if(!arr||!arr.length) return; document.getElementById(host).innerHTML="";
+    arr.forEach(function(t){ addRow(host,ph).value=t; }); addRow(host,ph); }
+  fill("accs_other",d.accounts_other,"Hospital, clinic or medical centre name");
+  fill("phs_other",d.pharmacies_other,"Pharmacy name");
+  if(d.doctors) d.doctors.forEach(function(dr){
+    var set=function(part,val){ var e=document.querySelector('[data-doc="'+dr.n+'"][data-part="'+part+'"]'); if(e&&val) e.value=val; };
+    set("name",dr.name); set("spec",dr.speciality); set("clinic",dr.clinic);
+  });
+})();
+
+show(1);
+})();
+</script>
+</body>
+</html>
