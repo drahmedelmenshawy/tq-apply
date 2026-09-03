@@ -31,6 +31,7 @@ header.top p{margin:0;font-size:14px;opacity:.92;max-width:56ch}
 .f > label,.legend{display:block;font-weight:600;font-size:14.5px;margin-bottom:6px}
 .sub{color:var(--muted);font-size:13px;font-weight:400;margin:2px 0 8px}
 .req{color:var(--danger);margin-left:2px}
+input[type=file]{width:100%;padding:10px 12px;border:1px dashed var(--brand);border-radius:9px;background:var(--brand-soft);font:inherit}
 input[type=text],input[type=email],input[type=tel],input[type=number],input[type=date],select,textarea{
   width:100%;padding:11px 12px;border:1px solid var(--line);border-radius:9px;font:inherit;color:inherit;
   background:#fff;-webkit-appearance:none;appearance:none;
@@ -79,7 +80,7 @@ input:focus,select:focus,textarea:focus{outline:2px solid var(--brand);outline-o
   <div class="wrap">
     <p class="brand">TQ Pharma</p>
     <h1>Medical Representative — Application</h1>
-    <p>Thank you for applying. Please complete this short form so we can finalise the shortlist for interview. It takes about 5 minutes and your answers are used only for this recruitment process.</p>
+    <p>Thank you for applying. Please complete this short form so we can finalise the shortlist for interview. It takes about 5 minutes.</p>
     <div class="bar"><i id="bar"></i></div>
     <div class="steplabel" id="steplabel">Step 1 of 6</div>
   </div>
@@ -91,7 +92,7 @@ input:focus,select:focus,textarea:focus{outline:2px solid var(--brand);outline-o
 
 <section class="card step" data-step="1">
   <h2>Your details</h2>
-  <p class="hint">All fields on this page are required.</p>
+  <p class="hint">All fields on this page are required. By submitting this form you agree that TQ Pharma may keep your application on file and contact you about this and future openings.</p>
 
   <div class="f"><label for="full_name">Full name (as in your passport)<span class="req">*</span></label>
     <input id="full_name" name="full_name" type="text" autocomplete="name" required><div class="err"></div></div>
@@ -218,6 +219,10 @@ input:focus,select:focus,textarea:focus{outline:2px solid var(--brand);outline-o
   <div class="f"><span class="legend">Notice period<span class="req">*</span></span>
     <div id="notice" data-radio="notice"></div><div class="err"></div></div>
 
+  <div class="f"><label for="cv">Attach your CV<span class="req">*</span></label>
+    <div class="sub">PDF or Word document, up to 5 MB.</div>
+    <input id="cv" name="cv" type="file" accept=".pdf,.doc,.docx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document" required><div class="err"></div></div>
+
   <div class="f"><label for="notes">Anything else you would like us to know?</label>
     <div class="sub">Optional.</div>
     <textarea id="notes" name="notes"></textarea></div>
@@ -237,7 +242,7 @@ input:focus,select:focus,textarea:focus{outline:2px solid var(--brand);outline-o
   <p>If you are shortlisted, our team will contact you on the WhatsApp number you provided to arrange an interview.</p>
 </div>
 
-<p class="foot">TQ Pharma · Your information is used only for this recruitment process.</p>
+<p class="foot">TQ Pharma · Your application is kept on file for this and future recruitment and is not shared outside TQ Pharma.</p>
 </div>
 <script>
 (function(){
@@ -393,7 +398,8 @@ function validate(n){
     if(!bad && i.type==="email") bad=!/^[^@\s]+@[^@\s]+\.[^@\s]{2,}$/.test(val);
     if(!bad && i.type==="tel") bad=(val.replace(/\D/g,"").length<8);
     if(!bad && i.type==="number"){ var num=parseFloat(val); bad=isNaN(num)||num<0; }
-    if(bad){ var f=fail(i, i.type==="email"?"Please enter a valid email address.":i.type==="tel"?"Please enter a valid phone number with country code.":"This answer is required."); if(!first)first=f; }
+    if(i.type==="file"){ bad=!(i.files&&i.files.length); }
+    if(bad){ var f=fail(i, i.type==="file"?"Please attach your CV.":i.type==="email"?"Please enter a valid email address.":i.type==="tel"?"Please enter a valid phone number with country code.":"This answer is required."); if(!first)first=f; }
   });
   Array.prototype.forEach.call(sec.querySelectorAll("[data-radio]"),function(h){
     var nm=h.getAttribute("data-radio");
@@ -407,6 +413,14 @@ function validate(n){
     if(nm==="pharmacies") ex=countExtras("phs_other");
     if(!chosen && !ex){ var f=fail(h,"Please select at least one, or add one below."); if(!first)first=f; }
   });
+  if(n===6){
+    var cvi=document.getElementById("cv"), cvf=cvi.files&&cvi.files[0];
+    if(cvf){
+      var okType=/\.(pdf|docx?)$/i.test(cvf.name);
+      if(!okType){ var f6=fail(cvi,"Please attach a PDF or Word document."); if(!first)first=f6; }
+      else if(cvf.size>5*1024*1024){ var f7=fail(cvi,"The file is larger than 5 MB. Please attach a smaller copy."); if(!first)first=f7; }
+    }
+  }
   if(n===5){
     var e=document.getElementById("docerr"); e.classList.remove("on");
     var partial=[], complete=0;
@@ -475,11 +489,25 @@ next.addEventListener("click",function(){
   if(!validate(step)) return;
   if(step<TOTAL){ show(step+1); return; }
   if(v("website")) return;
-  sending=true; next.disabled=true; next.textContent="Sending…";
-  fetch(SB_URL+"/rest/v1/applicant_intake",{
+  sending=true; next.disabled=true; next.textContent="Uploading CV…";
+  var id=(window.crypto&&crypto.randomUUID)?crypto.randomUUID():("xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g,function(c){var r=Math.random()*16|0;return (c==="x"?r:(r&3|8)).toString(16);}));
+  var cvf=document.getElementById("cv").files[0];
+  var ext=(cvf.name.match(/\.(pdf|docx?)$/i)||[".pdf"])[0].toLowerCase();
+  var ctype=ext===".pdf"?"application/pdf":ext===".doc"?"application/msword":"application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+  var path="cv-uploads/"+id+ext;
+  fetch(SB_URL+"/storage/v1/object/"+path,{
     method:"POST",
-    headers:{"apikey":SB_KEY,"Authorization":"Bearer "+SB_KEY,"Content-Type":"application/json","Prefer":"return=minimal"},
-    body:JSON.stringify({payload:collect()})
+    headers:{"apikey":SB_KEY,"Authorization":"Bearer "+SB_KEY,"Content-Type":ctype,"x-upsert":"false"},
+    body:cvf
+  }).then(function(r){
+    if(!r.ok) return r.text().then(function(t){ throw new Error("CV upload failed: HTTP "+r.status+" "+t.slice(0,160)); });
+    next.textContent="Sending…";
+    var p=collect(); p.cv_path=path; p.cv_filename=cvf.name; p.cv_size=cvf.size;
+    return fetch(SB_URL+"/rest/v1/applicant_intake",{
+      method:"POST",
+      headers:{"apikey":SB_KEY,"Authorization":"Bearer "+SB_KEY,"Content-Type":"application/json","Prefer":"return=minimal"},
+      body:JSON.stringify({id:id,payload:p})
+    });
   }).then(function(r){
     if(!r.ok) return r.text().then(function(t){ throw new Error("HTTP "+r.status+" "+t.slice(0,180)); });
     try{ localStorage.removeItem("tqp_draft"); }catch(e){}
