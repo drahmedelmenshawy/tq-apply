@@ -3,11 +3,11 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>TQ Pharma — Careers Application</title>
+<title>RepPharma Talent Acquisition — Application</title>
 <style>
 :root{
   --ink:#12232e; --muted:#5b6b76; --line:#dde5ea; --bg:#f4f7f9; --card:#fff;
-  --brand:#0f6e63; --brand-dark:#0b544c; --brand-soft:#e6f2f0; --danger:#b3261e; --radius:12px;
+  --brand:#1f4e8c; --brand-dark:#163a68; --brand-soft:#e8eff8; --danger:#b3261e; --radius:12px;
 }
 *{box-sizing:border-box}
 html,body{margin:0;padding:0}
@@ -74,9 +74,9 @@ input:focus,select:focus,textarea:focus{outline:2px solid var(--brand);outline-o
 <body>
 <header class="top">
   <div class="wrap">
-    <p class="brand">TQ Pharma</p>
-    <h1>Careers — Application</h1>
-    <p>Tell us what you are looking for and what you have done. The questions adapt to your answers. About 5 minutes.</p>
+    <p class="brand">RepPharma · Talent Acquisition</p>
+    <h1>Pharma sales talent — Application</h1>
+    <p>RepPharma connects pharmaceutical sales professionals in the UAE with companies that are hiring. Tell us what you are looking for and what you have done; the questions adapt to your answers. About 5 minutes.</p>
     <div class="bar"><i id="bar"></i></div>
     <div class="steplabel" id="steplabel">Step 1</div>
   </div>
@@ -108,7 +108,7 @@ input:focus,select:focus,textarea:focus{outline:2px solid var(--brand);outline-o
 <!-- ───────────────── 2. Personal ───────────────── -->
 <section class="card step" data-step="personal" hidden>
   <h2>Your details</h2>
-  <p class="hint">All fields on this page are required. By submitting this form you agree that TQ Pharma may keep your application on file and contact you about this and future openings.</p>
+  <p class="hint">All fields on this page are required. By submitting this form you agree that RepPharma may keep your profile on file, contact you about suitable openings, and share it with a hiring company only when a role matches you.</p>
   <div class="f"><label for="full_name">Full name (as in your passport)<span class="req">*</span></label>
     <input id="full_name" name="full_name" type="text" autocomplete="name" required><div class="err"></div></div>
   <div class="f"><label for="mobile">WhatsApp number<span class="req">*</span></label>
@@ -303,9 +303,9 @@ input:focus,select:focus,textarea:focus{outline:2px solid var(--brand);outline-o
 <div id="done" class="card done" hidden>
   <div class="tick">&#10003;</div>
   <h2>Thank you — your application has been received.</h2>
-  <p>If you are shortlisted, our team will contact you on the WhatsApp number you provided.</p>
+  <p>When a role matches your profile, the RepPharma team will contact you on the WhatsApp number you provided.</p>
 </div>
-<p class="foot">TQ Pharma · Your application is kept on file for this and future recruitment and is not shared outside TQ Pharma.</p>
+<p class="foot">RepPharma Talent Acquisition · reppharma.com · Your profile is kept on file for matching with hiring companies and is never sold or shared for any other purpose.</p>
 </div>
 
 <script>
@@ -523,7 +523,7 @@ function validate(){
 function collect(){
   var p=position(), f=fieldPref();
   var out={
-    form:"careers_v1", position:p, position_other:v("position_other"), fields_worked:vals("fields_worked"), field_pref:f,
+    form:"reppharma_talent_v1", position:p, position_other:v("position_other"), fields_worked:vals("fields_worked"), field_pref:f,
     full_name:v("full_name"), mobile:v("mobile"), email:v("email"), dob:v("dob"), nationality:v("nationality"),
     lives_in:one("live"), visa_status:one("visa"), driving_licence:one("licence"),
     degree:v("degree"), university:v("university"), grad_year:v("grad_year"),
